@@ -9,7 +9,7 @@ shinyServer(function(input, output) {
            "TSLA" = read.csv(url("http://real-chart.finance.yahoo.com/table.csv?s=TSLA&a=08&b=15&c=2014&d=08&e=15&f=2015&g=d&ignore=.csv"), header = TRUE, sep = ","),
            "YHOO" = read.csv(url("http://real-chart.finance.yahoo.com/table.csv?s=YHOO&a=08&b=15&c=2014&d=08&e=28&f=2015&g=d&ignore=.csv"), header = TRUE, sep = ",")
            )
-  })
+  }) 
   
   output$hist <- renderPlot({ 
     ST = datasetInput()
