@@ -16,6 +16,19 @@ i <- 1
 
 colu1 <- length(APPL$Close)
 
+# Saves stock closing values
+
+closeAPPL=c(APPL$Close)
+closeTSLA=c(TSLA$Close)
+closeYHOO=c(YHOO$Close)
+closeIBM=c(IBM_tick$Close)
+closeGOOG=c(GOOG$Close)
+closeFB=c(FB$Close)
+closeLNKD=c(LNKD$Close)
+closeMSFT=c(MSFT$Close)
+closeCSCO=c(CSCO$Close)
+closeMU=c(MU$Close)
+
 
 Apple <-c()
 Tesla <-c()
@@ -85,14 +98,70 @@ shinyServer(function(input, output) {
     
     bins <- input$bins
     stock <- datasetInput()
-    hist(stock,breaks = bins)
+    hist(stock,breaks = bins, main=paste("Histogram of ",input$stocks),xlab = "Log-Return Values", ylab = "Frequencies")
 
   })
   output$NormalProbPlot <- renderPlot({ 
     stock <- datasetInput()
+    period <- c()
     qqnorm(stock)
+    
   })
 
+  output$TrendPlot <- renderPlot({ 
+  # Depending on the input, plots closing stock values as a function of dates for the last year 
+    if (input$stocks == "AAPL") {
+      close = closeAPPL
+      days = c(APPL$Date)}
+    else if (input$stocks == "TSLA"){
+        
+        close = closeTSLA
+        days = c(TSLA$Date)
+    }
+    else if (input$stocks == "YHOO"){
+      
+      close = closeYHOO
+      days = c(YHOO$Date)
+    }
+    else if (input$stocks == "IBM"){
+      
+      close = closeIBM
+      days = c(IBM_tick$Date)
+    }
+    else if (input$stocks == "GOOG"){
+      
+      close = closeGOOG
+      days = c(GOOG$Date)
+    }
+    else if (input$stocks == "FB"){
+      
+      close = closeFB
+      days = c(FB$Date)
+    }
+    else if (input$stocks == "LNKD"){
+      
+      close = closeLNKD
+      days = c(LNKD$Date)
+    }
+    else if (input$stocks == "MSFT"){
+      
+      close = closeMSFT
+      days = c(MSFT$Date)
+    }
+    else if (input$stocks == "CSCO"){
+      
+      close = closeCSCO
+      days = c(CSCO$Date)
+    }
+    else if (input$stocks == "MU"){
+      
+      close = closeMU
+      days = c(MU$Date)
+    }
+    
+    plot(days,close,type="l", main = "Stock Trend", xlab = "Time", ylab = "Closing Value")
+    
+  })
   
   # downloadHandler() takes two arguments, both functions.
   # The content function is passed a filename as an argument, and

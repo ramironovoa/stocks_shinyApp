@@ -20,7 +20,8 @@ shinyUI(fluidPage(
     
     mainPanel(
       plotOutput('hist'),
-      plotOutput('NormalProbPlot')
+      plotOutput('NormalProbPlot'),
+      plotOutput('TrendPlot')
     )
   )
 ))
