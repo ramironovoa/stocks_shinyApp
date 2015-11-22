@@ -98,7 +98,14 @@ shinyServer(function(input, output) {
     
     bins <- input$bins
     stock <- datasetInput()
-    hist(stock,breaks = bins, main=paste("Histogram of ",input$stocks),xlab = "Log-Return Values", ylab = "Frequencies")
+    m<-mean(stock, na.rm=TRUE)
+    std<-sqrt(var(stock, na.rm=TRUE))
+    hist(stock, density=bins,breaks=bins, prob=TRUE,
+         xlab="Log-Return Values", 
+         ylab = "Frequencies",
+         main=paste("Histogram of ",input$stocks))
+    curve(dnorm(x, mean=m, sd=std), 
+          col="darkblue", lwd=2, add=TRUE)
 
   })
   output$NormalProbPlot <- renderPlot({ 
