@@ -186,7 +186,7 @@ shinyServer(function(input, output) {
       days = c(MU$Date)
     }
     
-    plot(days,close,type="l", main = "Stock Trend", xlab = "Time", ylab = "Closing Value",col='Green')
+    plot(days,close,type="l", main=input$stocks, xlab = "Time", ylab = "Closing Value",col='Green')
     
   })
   
