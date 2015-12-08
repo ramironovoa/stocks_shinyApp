@@ -27,10 +27,10 @@ shinyUI(fluidPage(
     
     
     mainPanel(
+      plotOutput('TrendPlot'),
       plotOutput('hist'),
       verbatimTextOutput('ConfidenceInterval'),
-      plotOutput('NormalProbPlot'),
-      plotOutput('TrendPlot')
+      plotOutput('NormalProbPlot')
     )
   )
 ))
