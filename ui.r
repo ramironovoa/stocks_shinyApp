@@ -22,7 +22,9 @@ shinyUI(fluidPage(
                   "Confidence Level(in %):",
                   min = 1,
                   max = 100,
-                  value = 95)
+                  value = 95),
+      selectInput("compstock", "Choose a comparison:", 
+                  choices = c("AAPL", "TSLA", "YHOO","IBM","GOOG","FB","LNKD","MSFT","CSCO","MU"))
     ),
     
     
@@ -30,7 +32,13 @@ shinyUI(fluidPage(
       plotOutput('TrendPlot'),
       plotOutput('hist'),
       verbatimTextOutput('ConfidenceInterval'),
-      plotOutput('NormalProbPlot')
+      plotOutput('NormalProbPlot'),
+      plotOutput("timeScatter"),
+      tableOutput("timeStats"),
+      tableOutput("timeResults"),
+      plotOutput("compScatter"),
+      tableOutput("compStats"),
+      tableOutput("compResults")
     )
   )
 ))
