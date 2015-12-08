@@ -1,3 +1,5 @@
+# The shiny server file
+
 library(shiny)
 #These will load once per session. Change which we use via user input
 APPL = read.csv(url("http://real-chart.finance.yahoo.com/table.csv?s=AAPL&a=08&b=14&c=2014&d=08&e=15&f=2015&g=d&ignore=.csv"), header = TRUE, sep = ",") #rename table.csv for any input csv file
@@ -93,7 +95,7 @@ shinyServer(function(input, output) {
            "CSCO" = Cisco,
            "MU" = Micron)
   })
-
+# A histogram of the log returns of the stock selected is superimposed by a normal curve as an output in the following function
   output$hist <- renderPlot({
     
     bins <- input$bins
@@ -108,15 +110,33 @@ shinyServer(function(input, output) {
           col="darkblue", lwd=2, add=TRUE)
 
   })
+  
+  # The following function outputs the confidence interval about the mean for the selected confidence level and selected stock
+  output$ConfidenceInterval<-renderPrint({
+    
+    stock <- datasetInput()
+    alpha<-input$clevel/100
+    z<-qnorm(1-alpha/2)
+    sigma=sd(stock, na.rm=TRUE)
+    xbar=mean(stock, na.rm=TRUE)
+    n=colu1
+    ME=(z*sigma/sqrt(n))
+    UB<-(xbar+ME)
+    LB<-(xbar-ME)
+    paste("The confidence interval:[",LB,",",UB,"]")
+    
+  })
+  
+  # This function plots a Quantile-Quantile plot to help us infer if the data set is normally distributed
   output$NormalProbPlot <- renderPlot({ 
     stock <- datasetInput()
     period <- c()
     qqnorm(stock)
     
   })
-
-  output$TrendPlot <- renderPlot({ 
   # Depending on the input, plots closing stock values as a function of dates for the last year 
+  output$TrendPlot <- renderPlot({ 
+  
     if (input$stocks == "AAPL") {
       close = closeAPPL
       days = c(APPL$Date)}
@@ -166,10 +186,11 @@ shinyServer(function(input, output) {
       days = c(MU$Date)
     }
     
-    plot(days,close,type="l", main = "Stock Trend", xlab = "Time", ylab = "Closing Value")
+    plot(days,close,type="l", main = "Stock Trend", xlab = "Time", ylab = "Closing Value",col='Green')
     
   })
   
+  # The following function is to assist the user in downloading the data set being analysed
   # downloadHandler() takes two arguments, both functions.
   # The content function is passed a filename as an argument, and
   #   it should write out data to that filename.
