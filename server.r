@@ -95,6 +95,19 @@ shinyServer(function(input, output) {
            "CSCO" = Cisco,
            "MU" = Micron)
   })
+  datasetInput_2 <- reactive({
+    switch(input$compstock,
+           "AAPL" = Apple,
+           "TSLA" = Tesla,
+           "YHOO" = Yahoo,
+           "IBM" = IBM,
+           "GOOG" = Google,
+           "FB" = Facebook,
+           "LNKD" = Linkedin,
+           "MSFT" = Microsoft,
+           "CSCO" = Cisco,
+           "MU" = Micron)
+  })
 # A histogram of the log returns of the stock selected is superimposed by a normal curve as an output in the following function
   output$hist <- renderPlot({
     
@@ -188,6 +201,64 @@ shinyServer(function(input, output) {
     
     plot(days,close,type="l", main=input$stocks, xlab = "Time", ylab = "Closing Value",col='Green')
     
+  })
+  #Regression: stock v time
+  timeResults <- reactive({
+    stock <- datasetInput()
+    time <- seq(1, length(stock), by = 1)
+    lm(stock~time)
+  })
+  #regression summary
+  output$timeStats <- renderTable({
+    results <- summary(timeResults())
+    data.frame(R2=results$r.squared,
+               adj.R2=results$adj.r.squared,
+               DOF.model=results$df[1],
+               DOF.available=results$df[2],
+               DOF.total=sum(results$df[1:2]),
+               f.value=results$fstatistic[1],
+               f.denom=results$fstatistic[2],
+               f.numer=results$fstatistic[3],
+               p=1-pf(results$fstatistic[1],
+                      results$fstatistic[2],
+                      results$fstatistic[3]))
+  })
+  # Show coefficients
+  output$timeResults <- renderTable(summary(timeResults()))
+  #scatter stock v time
+  output$timeScatter <- renderPlot({
+    stock <- datasetInput()
+    time <- seq(1, length(stock), by = 1)
+    plot(time, stock)
+    })
+  #Regression: stock1 v stock2
+  compResults <- reactive({
+    stock1 <- datasetInput()
+    stock2 <- datasetInput_2()
+    lm(stock1~stock2)
+  })
+  #regression summary
+  output$compStats <- renderTable({
+    results <- summary(compResults())
+    data.frame(R2=results$r.squared,
+               adj.R2=results$adj.r.squared,
+               DOF.model=results$df[1],
+               DOF.available=results$df[2],
+               DOF.total=sum(results$df[1:2]),
+               f.value=results$fstatistic[1],
+               f.denom=results$fstatistic[2],
+               f.numer=results$fstatistic[3],
+               p=1-pf(results$fstatistic[1],
+                      results$fstatistic[2],
+                      results$fstatistic[3]))
+  })
+  # Show coefficients
+  output$compResults <- renderTable(summary(compResults()))
+  #scatter stock1 v stock2
+  output$compScatter <- renderPlot({
+    stock1 <- datasetInput()
+    stock2 <- datasetInput_2()
+    plot(stock1, stock2)
   })
   
   # The following function is to assist the user in downloading the data set being analysed
