@@ -1,3 +1,5 @@
+# The shiny UI file
+
 library(shiny)
 
 shinyUI(fluidPage(
@@ -14,12 +16,19 @@ shinyUI(fluidPage(
                   "Number of bins:",
                   min = 1,
                   max = 100,
-                  value = 30)
+                  value = 30),
+      
+      sliderInput("clevel",
+                  "Confidence Level(in %):",
+                  min = 1,
+                  max = 100,
+                  value = 95)
     ),
     
     
     mainPanel(
       plotOutput('hist'),
+      verbatimTextOutput('ConfidenceInterval'),
       plotOutput('NormalProbPlot'),
       plotOutput('TrendPlot')
     )
