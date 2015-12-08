@@ -2,7 +2,7 @@
 What is it?
 -------------
 An analysis of a stock based on log returns containing:
-  *Stock trend
+* Stock trend
   *Histogram of log returns with normal probability curve overlaid
   *Confidence interval for the mean log return
   
