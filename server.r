@@ -215,8 +215,8 @@ shinyServer(function(input, output) {
                adj.R2=results$adj.r.squared,
                DOF.model=results$df[1],
                DOF.available=results$df[2],
-               DOF.total=sum(results$df[1:2]),
-               f.value=results$fstatistic[1],
+               DOF.total=(results$df[2]-results$df[1]),
+               f.value=round(results$fstatistic[1], digits=4),
                f.denom=results$fstatistic[2],
                f.numer=results$fstatistic[3],
                p=1-pf(results$fstatistic[1],
@@ -230,6 +230,7 @@ shinyServer(function(input, output) {
     stock <- datasetInput()
     time <- seq(1, length(stock), by = 1)
     plot(time, stock)
+    abline(timeResults())
     })
   #Regression: stock1 v stock2
   compResults <- reactive({
@@ -244,8 +245,8 @@ shinyServer(function(input, output) {
                adj.R2=results$adj.r.squared,
                DOF.model=results$df[1],
                DOF.available=results$df[2],
-               DOF.total=sum(results$df[1:2]),
-               f.value=results$fstatistic[1],
+               DOF.total=(results$df[2]-results$df[1]),
+               f.value=round(results$fstatistic[1], digits=4),
                f.denom=results$fstatistic[2],
                f.numer=results$fstatistic[3],
                p=1-pf(results$fstatistic[1],
@@ -259,6 +260,7 @@ shinyServer(function(input, output) {
     stock1 <- datasetInput()
     stock2 <- datasetInput_2()
     plot(stock1, stock2)
+    abline(compResults())
   })
   
   # The following function is to assist the user in downloading the data set being analysed
