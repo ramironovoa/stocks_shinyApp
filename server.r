@@ -202,13 +202,13 @@ shinyServer(function(input, output) {
     plot(days,close,type="l", main=input$stocks, xlab = "Time", ylab = "Closing Value",col='Green')
     
   })
-  #Regression: stock v time
+  #Regression: stock v time using lm(response~features)
   timeResults <- reactive({
     stock <- datasetInput()
     time <- seq(1, length(stock), by = 1)
     lm(stock~time)
   })
-  #regression summary
+  #regression summary 
   output$timeStats <- renderTable({
     results <- summary(timeResults())
     data.frame(R2=results$r.squared,
@@ -225,11 +225,11 @@ shinyServer(function(input, output) {
   })
   # Show coefficients
   output$timeResults <- renderTable(summary(timeResults()))
-  #scatter stock v time
+  #scatter stock v time. lm(y~x) plot (x,y)
   output$timeScatter <- renderPlot({
     stock <- datasetInput()
     time <- seq(1, length(stock), by = 1)
-    plot(time, stock)
+    plot(time, stock, xlab="time", ylab=input$stocks, main=paste(input$stocks, " v ", "Time"))
     abline(timeResults())
     })
   #Regression: stock1 v stock2
@@ -259,8 +259,13 @@ shinyServer(function(input, output) {
   output$compScatter <- renderPlot({
     stock1 <- datasetInput()
     stock2 <- datasetInput_2()
-    plot(stock1, stock2)
+    plot(stock1, stock2, xlab=input$compstock, ylab=input$stocks, main=paste(input$stocks, " v ", input$compstock))
     abline(compResults())
+  })
+  #plot residuals
+  output$residualScatter <- renderPlot({
+    #List of residuals
+    plot(density(resid(compResults())), main=paste("residuals for",input$stocks, " v ", input$compstock)) #A density plot
   })
   
   # The following function is to assist the user in downloading the data set being analysed
