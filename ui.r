@@ -38,7 +38,8 @@ shinyUI(fluidPage(
       tableOutput("timeResults"),
       plotOutput("compScatter"),
       tableOutput("compStats"),
-      tableOutput("compResults")
+      tableOutput("compResults"),
+      plotOutput("residualScatter")
     )
   )
 ))
